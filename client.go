@@ -41,15 +41,26 @@ func (c *Client) Do(req *http.Request, headers ...map[string]string) (*http.Resp
 }
 
 func (c *Client) Get(ctx context.Context, url string, headers ...map[string]string) (*http.Response, []byte, error) {
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, nil, err
 	}
 	return c.Do(req, headers...)
 }
 
+func (c *Client) Post(ctx context.Context, url string, body io.Reader, contentType string, headers ...map[string]string) (*http.Response, []byte, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
+	if err != nil {
+		return nil, nil, err
+	}
+	if contentType != "" {
+		req.Header.Set("Content-Type", contentType)
+	}
+	return c.Do(req, headers...)
+}
+
 func (c *Client) PostForm(ctx context.Context, url string, data url.Values, headers ...map[string]string) (*http.Response, []byte, error) {
-	req, err := http.NewRequestWithContext(ctx, "POST", url, strings.NewReader(data.Encode()))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, nil, err
 	}
