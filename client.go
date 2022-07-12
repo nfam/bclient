@@ -48,7 +48,7 @@ func (c *Client) Get(ctx context.Context, url string, headers ...map[string]stri
 	return c.Do(req, headers...)
 }
 
-func (c *Client) Post(ctx context.Context, url string, body io.Reader, contentType string, headers ...map[string]string) (*http.Response, []byte, error) {
+func (c *Client) Post(ctx context.Context, url string, contentType string, body io.Reader, headers ...map[string]string) (*http.Response, []byte, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
 	if err != nil {
 		return nil, nil, err
